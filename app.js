@@ -1,3 +1,8 @@
+//In this app you get 5 winning numbers and player gets 9 numbers of their own
+//If any of the player's numbers match the winners, the player wins
+//Ideally all numbers would be fetched from backend
+//This could still be improved by making sure no numbers are repeated
+
 const Application = PIXI.Application;
 
 const app = new Application({
@@ -55,13 +60,27 @@ const rectanglePos = [
     100, 540
 ]
 
-const winningText = new PIXI.Text("You Win!!!", style)
+//Player's numbers
+const playerRectanglePos = [
+    300, 100,
+    300, 210,
+    300, 320,
+    410, 100,
+    410, 210,
+    410, 320,
+    520, 100,
+    520, 210,
+    520, 320
+]
+
+//Create a text that let's the player know if they won
+const winningText = new PIXI.Text("If you see this, there has been an error", style)
 winningText.x = 350 + offset;
 winningText.y = 500 + offset;
-winningText.alpha =0;
+winningText.alpha = 0;
 app.stage.addChild(winningText);
 
-//Draw winning numbers
+//Draw winning numbers as text objects on recatngle graphics
 for(let i = 0; i < 5; i++){
     const rectangle = new PIXI.Graphics();
     rectangle.beginFill(Math.random() * 0xFFFFFF)
@@ -78,19 +97,8 @@ for(let i = 0; i < 5; i++){
     app.stage.addChild(number);
 }
 
-const playerRectanglePos = [
-    300, 100,
-    300, 210,
-    300, 320,
-    410, 100,
-    410, 210,
-    410, 320,
-    520, 100,
-    520, 210,
-    520, 320
-]
-
 //Draw player numbers
+//They are invisible until the player clicks a number and reveals it
 for(let i = 0; i < 9; i++){
 
     const rectangle = new PIXI.Graphics();
@@ -121,16 +129,18 @@ for(let i = 0; i < 9; i++){
 
 }
 
+//Is run then a scratch card number is pressed
+//Reveals the number and declares a winner whn numbers match
 function onButtonDown(){
-    loggerfunc();
-
     if(this.isRevealed) return;
 
     this.isRevealed = true;
     revealed += 1;
+    //Iterate through buttons to find the pressed one
     for(let i = 0; i< buttons.length; i++){
         if(this === buttons[i].button){
             buttons[i].numberte.alpha = 1;
+            //Check if button and any of the winning numbers match
             for(let k = 0; k < winningNumbers.length; k++){
                 if(buttons[i].numberte.text === String(winningNumbers[k])){
                     didWin = true;
@@ -139,9 +149,12 @@ function onButtonDown(){
         }
     }
 
+    //You win if nay of the numbers match
     if(didWin){
         winningText.alpha = 1;
+        winningText.text = "You Win!!!";
     }
+    //You lose if all numbers are revelaed and none matched
     else if(revealed >= 9){
         winningText.text = "You Lose...";
         winningText.alpha = 1;

@@ -1,12 +1,4 @@
-function loop(delta, obj){
-    elapsed += delta;
-    obj.rotation += 0.01;
-}
-
-function loggerfunc(){
-    console.log("Kissa");
-}
-
+//Gets a random color
 function getRandomColor() {
     var letters = '0123456789ABCDEF';
     var color = '#';
